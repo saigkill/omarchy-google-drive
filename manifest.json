@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "id": "saigkill.google-drive",
+  "name": "Google Drive sync",
+  "version": "1.1.1",
+  "author": "Sascha Manns",
+  "license": "MIT",
+  "description": "Two-way Google Drive sync for any number of folders, built on rclone bisync, on a timer and when local files change",
+  "kinds": [
+    "service",
+    "bar-widget"
+  ],
+  "entryPoints": {
+    "service": "Service.qml",
+    "barWidget": "BarWidget.qml"
+  },
+  "barWidget": {
+    "displayName": "Google Drive sync",
+    "description": "Drive icon in the bar showing the sync state. Opens a panel to connect a Google account, manage folder pairs, sync now, and see conflicts. Middle-click syncs everything.",
+    "category": "Internet",
+    "allowMultiple": false,
+    "defaultSection": "right",
+    "defaults": {
+      "remote": "gdrive",
+      "intervalMinutes": 15,
+      "watchChanges": true,
+      "debounceSeconds": 20,
+      "notify": true
+    },
+    "schema": [
+      {
+        "key": "remote",
+        "type": "string",
+        "label": "rclone remote",
+        "defaultValue": "gdrive",
+        "description": "Name of the rclone remote to use. Connecting from the panel creates it; an existing Google Drive remote of that name (for example one with your own client id) is used as it is."
+      },
+      {
+        "key": "intervalMinutes",
+        "type": "integer",
+        "label": "Sync every",
+        "min": 0,
+        "max": 1440,
+        "step": 5,
+        "defaultValue": 15,
+        "description": "Minutes between full syncs, which is what picks up changes made on Drive. 0 turns the timer off."
+      },
+      {
+        "key": "watchChanges",
+        "type": "boolean",
+        "label": "Sync on local changes",
+        "defaultValue": true,
+        "description": "Watch the local folders with inotify and sync a folder shortly after something in it changed."
+      },
+      {
+        "key": "debounceSeconds",
+        "type": "integer",
+        "label": "Wait after a change",
+        "min": 3,
+        "max": 600,
+        "step": 1,
+        "defaultValue": 20,
+        "description": "Seconds of quiet after the last local change before the folder is synced."
+      },
+      {
+        "key": "notify",
+        "type": "boolean",
+        "label": "Notifications",
+        "defaultValue": true,
+        "description": "Notify when a sync fails, when new conflicts appear, and when a failing folder syncs again."
+      }
+    ]
+  }
+}
